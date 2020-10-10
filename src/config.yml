@@ -1,0 +1,6 @@
+# This is the on/off switch for the plugin.
+# It only has two possible options 'Enabled' or 'Disabled'.
+# DO NOT EDIT IT
+status: 'Disabled'
+# This is the  prefix that is shown when the plugin sends a message in chat.
+prefix:  '&7[&aGodBridge&7]'

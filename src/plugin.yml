@@ -1,0 +1,11 @@
+main: kendrip.GodBridge.GodBridgeMain
+name: GodBridging
+description: Makes everyone godbridge.
+version: 1.2
+author: Kendrip
+
+commands:
+  godbridge:
+    aliases: gb
+    description: Makes everyone godbridge.
+    usage: /<command> enable OR /<command> disable
