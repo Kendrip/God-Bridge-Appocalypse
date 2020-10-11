@@ -1,6 +1,7 @@
 package kendrip.GodBridge;
 
 import kendrip.GodBridge.commands.GodBridge;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -11,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -18,10 +20,14 @@ import java.util.List;
 
 public class GodBridgeMain extends JavaPlugin implements Listener {
 
+    public static boolean status = false;
+
     @Override
     public void onEnable() {
+        System.out.println("\n\n\n\n" + Material.matchMaterial("WOOL") + "\n\n\n\n");
+
+
         getConfig().options().copyDefaults(true);
-        GodBridge.setConfigPrefix();
         saveDefaultConfig();
         this.getServer().getPluginManager().registerEvents(this, this);
         getCommand("godbridge").setExecutor(new GodBridge());
@@ -54,31 +60,41 @@ public class GodBridgeMain extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         Location location = player.getLocation();
         World world = player.getWorld();
-        boolean isSneaking = player.isSneaking();
 
-        if (getConfig().getString("status").equalsIgnoreCase("enabled")) {
-            if (!isSneaking) {
-                int X = location.getBlockX();
-                int Y = location.getBlockY() - 1;
-                int Z = location.getBlockZ();
-
-                world.getBlockAt(X, Y, Z).setType(Material.WOOL);
-            }
+        if (status) {
+            int X = location.getBlockX();
+            int Y = location.getBlockY() - 1;
+            int Z = location.getBlockZ();
+            Material bridgeBlock = checkMaterial(getConfig().getString("block-id"));
+            world.getBlockAt(X, Y, Z).setType(bridgeBlock);
         }
     }
 
     @EventHandler
     private void onFallDamage(EntityDamageEvent event) {
-        if (getConfig().getString("status").equalsIgnoreCase("enabled")) {
-            try {
-                Player player = ((Player) event.getEntity());
-
+        if (status) {
+            if (event.getEntity() instanceof Player) {
                 if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
                     event.setCancelled(true);
                 }
-            } catch (Exception ignored) {
             }
         }
+    }
 
+    @SuppressWarnings("deprecation")
+    private static Material checkMaterial(String BlockData) {
+
+        Material _BlockData = null;
+
+        if (BlockData.contains(":")) {
+            String[] idArray = BlockData.split(":");
+            Material blockName = Material.getMaterial(Integer.parseInt(idArray[0]));
+            byte blockID = Byte.parseByte(idArray[1]);
+            ItemStack item = new ItemStack(blockName, 1, (byte) blockID);
+
+            _BlockData = item.getType();
+        }
+
+        return _BlockData;
     }
 }

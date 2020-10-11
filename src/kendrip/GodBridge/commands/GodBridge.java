@@ -1,5 +1,6 @@
 package kendrip.GodBridge.commands;
 
+import kendrip.GodBridge.GodBridgeMain;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -21,23 +22,19 @@ public class GodBridge implements CommandExecutor {
             if (args.length == 1) {
 
                 if (args[0].equalsIgnoreCase("enable")) {
-                    if (Bukkit.getServer().getPluginManager().getPlugin("GodBridging")
-                            .getConfig().getString("status").equalsIgnoreCase("enabled")) {
+                    if (GodBridgeMain.status) {
                         player.sendMessage(pluginPrefix + ChatColor.GOLD + " Already Enabled");
                     } else {
                         player.sendMessage(pluginPrefix + ChatColor.GREEN + " Enabled");
-                        Bukkit.getServer().getPluginManager().getPlugin("GodBridging").getConfig().set("status", "Enabled");
-                        Bukkit.getServer().getPluginManager().getPlugin("GodBridging").saveConfig();
+                        GodBridgeMain.status = true;
                     }
                 }
                 if (args[0].equalsIgnoreCase("disable")) {
-                    if (Bukkit.getServer().getPluginManager().getPlugin("GodBridging")
-                            .getConfig().getString("status").equalsIgnoreCase("disabled")) {
+                    if (!GodBridgeMain.status) {
                         player.sendMessage(pluginPrefix + ChatColor.RED + " Already Disabled");
                     } else {
                         player.sendMessage(pluginPrefix + ChatColor.RED + " Disabled");
-                        Bukkit.getServer().getPluginManager().getPlugin("GodBridging").getConfig().set("status", "Disabled");
-                        Bukkit.getServer().getPluginManager().getPlugin("GodBridging").saveConfig();
+                        GodBridgeMain.status = false;
                     }
                 }
                 if (args[0].equalsIgnoreCase("reload")) {
@@ -49,9 +46,4 @@ public class GodBridge implements CommandExecutor {
         }
         return false;
     }
-
-    public static void setConfigPrefix() {
-       Bukkit.getServer().getPluginManager().getPlugin("GodBridging").getConfig().set("prefix", configPrefix);
-       Bukkit.getServer().getPluginManager().getPlugin("GodBridging").saveConfig();
-}
 }
