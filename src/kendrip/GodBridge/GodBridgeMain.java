@@ -24,8 +24,6 @@ public class GodBridgeMain extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        System.out.println("\n\n\n\n" + Material.matchMaterial("WOOL") + "\n\n\n\n");
-
 
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
@@ -48,8 +46,8 @@ public class GodBridgeMain extends JavaPlugin implements Listener {
         cmdList.add("disable");
         cmdList.add("reload");
 
-        if (!cmd.getName().equalsIgnoreCase("godbridge") || cmd.getName().equalsIgnoreCase("gb")) {
-            //do nothing
+        if (cmd.getName().equalsIgnoreCase("godbridge") || cmd.getName().equalsIgnoreCase("gb")) {
+            return cmdList;
         }
         return cmdList;
 
